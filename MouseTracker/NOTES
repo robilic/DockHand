@@ -1,0 +1,102 @@
+
++Get the PID for the icon we are hovering over
++Identify how many windows that icon has
++Draw a tooltip or something with info about that icon
++Draw the preview of the window
++Draw gray silouhette behind preview windows
++Draw multiple previews
++copy each individual preview to NSArray
++draw the name of the app above/inside the preview window
++Why do some apps have more than 1 window but only 1 actual window?
++draw more than 3 previews
++Detect if on same dock icon when moved and be lazy
++Show window titles in previews
+
+TODO:
+
+-Put preview right above dock
+-Don't hide preview window unless over another icon that isn't running or click outisde of preview window
+-Don't draw status bar icons
+-Click on X in the corner of window to close the window
+-Click on a preview to bring that window to the front
+-Draw aspect-correct Previews
+-Anti-alias previews
+-Make sure preview Window is always on top
+-Draw more than row of preview windows
+-Increase timer resolution
+-At some point don't show MouseTracker the icon in the dock (maybe menubar?) it draws itself (mirror into mirror)
+-Multiple monitor support
+-Dock in places other than bottom
+
+Window Info:
+
+kCGWindowName = statusBarItem; // Don't draw this - otherwise use the name to put it under the preview
+a = Screenwidth - (screenwidth/10)
+a = a - previewBorderWidth
+
+
+
+
+PreviewClass (Views that get added to OverlayView)
+
+ Image to back the view
+ Draw the image
+ Window ID
+ Ability to close Window
+ Ability to bring Window to front
+ Draw the name of the title of the window
+ Mouseover highlights the window (reduce opacity?)
+
+
+
+
+
+
+
+Crashing when hovering over iTerm, producing this error:
+
+2018-08-30 16:06:13.079496-0400 MouseTracker[1970:86222] drawRect:
+2018-08-30 16:06:13.079545-0400 MouseTracker[1970:86222] The mainScreen is 1440, 900
+2018-08-30 16:06:13.097276-0400 MouseTracker[1970:86222] Going to draw 1 windows
+2018-08-30 16:06:14.070790-0400 MouseTracker[1970:86222] Searching for windows belonging to iTerm
+2018-08-30 16:06:14.073123-0400 MouseTracker[1970:86222] Setting window ids to (
+)
+2018-08-30 16:06:14.079765-0400 MouseTracker[1970:86222] drawRect:
+2018-08-30 16:06:14.079825-0400 MouseTracker[1970:86222] The mainScreen is 1440, 900
+2018-08-30 16:06:14.080161-0400 MouseTracker[1970:86222] [General] *** -[__NSArray0 objectAtIndex:]: index 0 beyond bounds for empty NSArray
+2018-08-30 16:06:14.082446-0400 MouseTracker[1970:86222] [General] (
+0   CoreFoundation                      0x00007fff309752db __exceptionPreprocess + 171
+1   libobjc.A.dylib                     0x00007fff57b16c76 objc_exception_throw + 48
+2   CoreFoundation                      0x00007fff3098f8cd -[__NSArray0 objectAtIndex:] + 93
+3   MouseTracker                        0x0000000100001ad9 -[OverlayView drawRect:] + 473
+4   AppKit                              0x00007fff2e738f29 _NSViewDrawRect + 83
+5   AppKit                              0x00007fff2e7461c4 -[NSView(NSInternal) _recursive:displayRectIgnoringOpacity:inGraphicsContext:shouldChangeFontReferenceColor:] + 1578
+6   AppKit                              0x00007fff2e745b94 -[NSView(NSInternal) _recursive:displayRectIgnoringOpacity:inContext:shouldChangeFontReferenceColor:] + 56
+7   AppKit                              0x00007fff2dfd7074 __46-[NSView(NSLayerKitGlue) drawLayer:inContext:]_block_invoke + 289
+8   AppKit                              0x00007fff2dfd6c08 -[NSView(NSLayerKitGlue) _drawViewBackingLayer:inContext:drawingHandler:] + 1577
+9   AppKit                              0x00007fff2dfd65d9 -[NSView(NSLayerKitGlue) drawLayer:inContext:] + 77
+10  QuartzCore                          0x00007fff3bc705e6 CABackingStoreUpdate_ + 300
+11  QuartzCore                          0x00007fff3bc704af ___ZN2CA5Layer8display_Ev_block_invoke + 53
+12  QuartzCore                          0x00007fff3bc6fd36 -[CALayer _display] + 2238
+13  AppKit                              0x00007fff2dfd559e _NSBackingLayerDisplay + 556
+14  AppKit                              0x00007fff2dfca409 -[_NSViewBackingLayer display] + 242
+15  QuartzCore                          0x00007fff3bc60e7d _ZN2CA5Layer17display_if_neededEPNS_11TransactionE + 633
+16  QuartzCore                          0x00007fff3bc6093b _ZN2CA5Layer28layout_and_display_if_neededEPNS_11TransactionE + 35
+17  QuartzCore                          0x00007fff3bc5f92c _ZN2CA7Context18commit_transactionEPNS_11TransactionE + 326
+18  QuartzCore                          0x00007fff3bc5f4c5 _ZN2CA11Transaction6commitEv + 487
+19  QuartzCore                          0x00007fff3bc6b98a _ZN2CA11Transaction17observer_callbackEP19__CFRunLoopObservermPv + 66
+20  CoreFoundation                      0x00007fff3090d417 __CFRUNLOOP_IS_CALLING_OUT_TO_AN_OBSERVER_CALLBACK_FUNCTION__ + 23
+21  CoreFoundation                      0x00007fff3090d33f __CFRunLoopDoObservers + 527
+22  CoreFoundation                      0x00007fff308efa20 __CFRunLoopRun + 1600
+23  CoreFoundation                      0x00007fff308ef153 CFRunLoopRunSpecific + 483
+24  HIToolbox                           0x00007fff2fbd9d96 RunCurrentEventLoopInMode + 286
+25  HIToolbox                           0x00007fff2fbd9b06 ReceiveNextEventCommon + 613
+26  HIToolbox                           0x00007fff2fbd9884 _BlockUntilNextEventMatchingListInModeWithFilter + 64
+27  AppKit                              0x00007fff2de8aa73 _DPSNextEvent + 2085
+28  AppKit                              0x00007fff2e620e34 -[NSApplication(NSEvent) _nextEventMatchingEventMask:untilDate:inMode:dequeue:] + 3044
+29  AppKit                              0x00007fff2de7f885 -[NSApplication run] + 764
+30  AppKit                              0x00007fff2de4ea72 NSApplicationMain + 804
+31  MouseTracker                        0x0000000100001f02 main + 34
+32  libdyld.dylib                       0x00007fff58730015 start + 1
+)
+
