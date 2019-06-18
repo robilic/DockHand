@@ -25,18 +25,12 @@
     
     // Fill in view
     NSRect bounds = [self bounds];
-    // bounds.origin.y = bounds.origin.y + 15;
-    [button_color set];
-    [NSBezierPath fillRect:bounds];
-    /*
-     
-    [backgroundImage setSize:NSMakeSize(bounds.size.width, bounds.size.height)];
+    NSLog(@"PreviewThumbnail:drawRect");
+    CGContextRef ctx = (CGContextRef)[[NSGraphicsContext currentContext] graphicsPort];
+    CGRect renderRect = CGRectMake(bounds.origin.x, bounds.origin.y, bounds.size.width, bounds.size.height);
+    CGContextDrawImage(ctx, renderRect, backgroundImage);
+    CGImageRelease(backgroundImage);
     
-    [backgroundImage drawAtPoint:NSMakePoint(0,0)
-              fromRect:NSZeroRect
-             operation:NSCompositingOperationCopy
-              fraction:1.0];
-     */
     // Draw preview title
     NSSize strSize = [windowName sizeWithAttributes:attributes];
     NSPoint strOrigin;

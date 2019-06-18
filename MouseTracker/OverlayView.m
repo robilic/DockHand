@@ -84,8 +84,8 @@
     
     float start = screenMidpoint - ((totalPreviewWidth * previewWindowCount) / 2);
     float x = (start + previewBorder / 2);
-    NSLog(@"Start = %g", start);
-    //NSLog(@"There are %lu windowIds", previewWindowCount);
+    //NSLog(@"Start = %g", start);
+    NSLog(@"There are %lu windowIds", previewWindowCount);
 
     // grab all the preview images
     if (previewWindowCount > 0U) {
@@ -93,11 +93,11 @@
             // grab the image
             thumbref = CGWindowListCreateImage(nullImageBounds, kCGWindowListOptionIncludingWindow, [[windowIds objectAtIndex:i] intValue], kCGWindowImageNominalResolution || kCGWindowImageBoundsIgnoreFraming);
             // encode it, add to array
-            //NSValue *cgImageValue = [NSValue valueWithBytes:&thumbref objCType:@encode(CGImageRef)];
-            //[previewThumbnails addObject:cgImageValue];
+            NSValue *cgImageValue = [NSValue valueWithBytes:&thumbref objCType:@encode(CGImageRef)];
+            [previewThumbnails addObject:cgImageValue];
             
             windowInfo = CFBridgingRelease(CGWindowListCopyWindowInfo(kCGWindowListOptionIncludingWindow, [[windowIds objectAtIndex:i] intValue]));
-            NSLog(@"createPreviews\nwindowInfo (%lu) = %@", i, windowInfo);
+            //NSLog(@"createPreviews\nwindowInfo (%lu) = %@", i, windowInfo);
             NSRect thumbnailFrame = NSMakeRect(x, dockSize+previewBorder, previewWidth, previewHeight);
             PreviewThumbnail *thumbnailView;
             thumbnailView = [[PreviewThumbnail new] initWithFrame:thumbnailFrame];
@@ -114,26 +114,25 @@
     //   kCGWindowLayer = "-2147483603";
     //   kCGWindowOwnerPID = our PID
 
-    //NSImage *thumb = [[NSImage new] initWithCGImage:thumbref size:NSZeroSize];
+    NSImage *thumb = [[NSImage new] initWithCGImage:thumbref size:NSZeroSize];
+    
     for (unsigned long i = 0; i < previewWindowCount; i++) {
-        /*
-         [[previewThumbnails objectAtIndex:i] getValue:&thumbRetrieve];
+        [[previewThumbnails objectAtIndex:i] getValue:&thumbRetrieve];
          NSImage *thumb = [[NSImage new] initWithCGImage:thumbRetrieve size:NSZeroSize];
          //NSLog(@"thumbref = %zu x %zu, thumb = %g x %g", CGImageGetWidth(thumbref), CGImageGetWidth(thumbref), 0.0, 0.0);
          [thumb setSize:NSMakeSize(previewWidth, previewHeight)];
          [thumb drawAtPoint:NSMakePoint(x, 100.0+previewBorder)
-         fromRect:NSZeroRect
-         operation:NSCompositingOperationCopy
-         fraction:1.0];
+                   fromRect:NSZeroRect
+                  operation:NSCompositingOperationCopy
+                   fraction:1.0];
+        
          //TODO: draw text to label this window
-         */
+         // NSGR something
     }
 }
 
 - (void)drawRect:(NSRect)dirtyRect
 {
-    NSLog(@"drawRect:");
-
     if ([windowIds count] == 0) {
         NSLog(@"No windowIds set, exiting drawRect");
         return;
